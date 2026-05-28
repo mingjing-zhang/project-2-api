@@ -114,19 +114,29 @@ Both nested schemas are exercised by frontend pages.
 
 ## 6. Sample data
 
-The seed script [`seed.py`](https://github.com/mingjing-zhang/project-2-api/blob/main/seed.py) loads **3 series and 19 articles** — all real published essays:
+The seed script [`seed.py`](https://github.com/mingjing-zhang/project-2-api/blob/main/seed.py) loads **3 series and 19 articles** — all real published essays, each linked to its actual Medium post:
 
 - **Series 1: "Not Just HODLing — Real Bitcoin Script Engineering"** — 4 articles, positioned #1–#4 (CSV+P2SH → Bitcoinutils → 4-leaf Taproot tree → Control block deep analysis)
 - **Series 2: "OP_* on Signet — Bitcoin Inquisition"** — 6 articles, positioned #1–#6 (OP_CAT → OP_CSFS → OP_CTV → OP_INTERNALKEY+CSFS → OP_CAT+CSFS → SIGHASH_ANYPREVOUT)
 - **Series 3: "Mastering Taproot"** — 1 article (P2SH 2-of-3 multisig chapter)
 - **8 standalone articles** (no series): Bitcoin Doesn't Use Encryption, Why V3 Matters, RootScope, The Missing Developer Stack of Taproot, Commit-Reveal vs Dual-Layer Scripts, etc.
 
-The seed is **idempotent** — running it twice does not duplicate data.
+All 19 article URLs link to the live Medium posts at [medium.com/@aaron.recompile](https://medium.com/@aaron.recompile). The seed is **idempotent** — running it twice does not duplicate data.
 
 ---
 
 ## 7. Screenshots (lab submission item 4)
 
-See [`screenshots/`](https://github.com/mingjing-zhang/project-2-api/tree/main/screenshots) for:
-- A page listing records (e.g., `/series` or `/articles`)
-- The create form filled out (`/articles/new`)
+### One page listing records — `/articles`
+
+![Articles list page](https://raw.githubusercontent.com/mingjing-zhang/project-2-api/main/screenshots/01-list-page.png)
+
+The flat articles list at `http://localhost:3000/articles`. Each row shows title, subtitle, published date, and the series pill (the relationship). The dropdown at the top filters by series.
+
+### The create form working — `/articles/new`
+
+![Create article form](https://raw.githubusercontent.com/mingjing-zhang/project-2-api/main/screenshots/02-create-form.png)
+
+The article create form at `http://localhost:3000/articles/new`. The Series dropdown is populated by a `fetch` to `GET /series` — picking a series here will set the `series_id` foreign key on the new article. Submitting POSTs to `/articles` and redirects back to the list.
+
+Both files also live in the repo at [`screenshots/`](https://github.com/mingjing-zhang/project-2-api/tree/main/screenshots).
