@@ -58,10 +58,13 @@ URL_MAP: dict[str, str | None] = {
     "Bitcoin Doesn't Use Encryption — What Adam Back's Comment Really Means":
         "https://medium.com/@aaron.recompile/bitcoin-doesnt-use-encryption-what-adam-back-s-comment-really-means-4c3f1527a4d3",
 
-    # --- Still missing (user didn't supply yet) — leave NULL so UI hides the link ---
-    "How I Built a Time-Locked Bitcoin Script with CSV and P2SH": None,
-    "A Guide to Creating Taproot Scripts with Python Bitcoinutils": None,
-    "How Bitcoin P2SH Scripts Work: From 2-of-3 Multisig to Timelocked Inheritance": None,
+    # --- Final 3 URLs supplied by user (2026-05-28) — all 19 articles now linked ---
+    "How I Built a Time-Locked Bitcoin Script with CSV and P2SH":
+        "https://medium.com/@aaron.recompile/how-i-built-a-time-locked-bitcoin-script-with-csv-and-p2sh-c48c0389709d",
+    "A Guide to Creating Taproot Scripts with Python Bitcoinutils":
+        "https://medium.com/@aaron.recompile/a-guide-to-creating-taproot-scripts-with-python-bitcoinutils-e088633bc2a7",
+    "How Bitcoin P2SH Scripts Work: From 2-of-3 Multisig to Timelocked Inheritance":
+        "https://medium.com/@aaron.recompile/how-bitcoin-p2sh-scripts-work-from-2-of-3-multisig-to-timelocked-inheritance-8015010dd6f2",
 }
 
 
