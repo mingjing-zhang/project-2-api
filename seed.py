@@ -1,0 +1,197 @@
+"""Seed the database with real Aaron Recompile blog data.
+
+Idempotent: skips seeding if any series already exists.
+Run with:
+    docker compose exec backend python seed.py
+or locally:
+    python seed.py
+"""
+
+from datetime import date
+
+from database import Base, SessionLocal, engine
+from models import Article, Series
+
+
+SERIES = [
+    {
+        "name": "Not Just HODLing — Real Bitcoin Script Engineering",
+        "slug": "not-just-hodling",
+        "description": "Hands-on Bitcoin Script engineering: timelocks, multisig, Taproot trees, control blocks, and stack execution — built and tested on testnet.",
+        "articles": [
+            {
+                "title": "How I Built a Time-Locked Bitcoin Script with CSV and P2SH",
+                "subtitle": "Not Just HODLing: Real Bitcoin Script Engineering #1",
+                "published_at": date(2025, 6, 29),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 1,
+            },
+            {
+                "title": "A Guide to Creating Taproot Scripts with Python Bitcoinutils",
+                "subtitle": "Not Just HODLing: Real Bitcoin Script Engineering #2",
+                "published_at": date(2025, 6, 29),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 2,
+            },
+            {
+                "title": "Building a 4-Leaf Taproot Tree in Python: The First Complete Implementation on Bitcoin Testnet",
+                "subtitle": "Not Just HODLing #3 — a complete Taproot tree with five spending paths in Python and live-tested",
+                "published_at": date(2025, 7, 1),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 3,
+            },
+            {
+                "title": "Taproot Control Block Deep Analysis & Stack Execution Visualization | Part 2",
+                "subtitle": "In Part 1, we implemented a complete 4-leaf Taproot tree. Now we open the control block and visualize the stack.",
+                "published_at": date(2025, 7, 7),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 4,
+            },
+        ],
+    },
+    {
+        "name": "OP_* on Signet — Bitcoin Inquisition",
+        "slug": "op-on-signet",
+        "description": "Running experimental Bitcoin opcodes on Signet via Bitcoin Inquisition: OP_CAT, OP_CHECKSIGFROMSTACK, OP_CTV, OP_INTERNALKEY, and SIGHASH_ANYPREVOUT.",
+        "articles": [
+            {
+                "title": "OP_CAT on Signet — Concatenation, Commitment, and Bitcoin Inquisition",
+                "subtitle": "Satoshi disabled it in 2010. We ran it on-chain in 2026.",
+                "published_at": date(2026, 3, 16),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 1,
+            },
+            {
+                "title": "OP_CHECKSIGFROMSTACK on Signet — Sign Anything, Verify on Stack",
+                "subtitle": "Satoshi disabled OP_CAT in 2010. OP_CSFS was never even enabled. We ran it on-chain in 2026.",
+                "published_at": date(2026, 3, 17),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 2,
+            },
+            {
+                "title": "OP_CHECKTEMPLATEVERIFY on Signet — Locking Outputs at UTXO Creation Time",
+                "subtitle": "With OP_CAT you assemble data. With OP_CSFS you authorize it. With OP_CTV you enforce it.",
+                "published_at": date(2026, 3, 19),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 3,
+            },
+            {
+                "title": "OP_INTERNALKEY + OP_CHECKSIGFROMSTACK on Signet — Identity-Bound Authorization",
+                "subtitle": "Pure CSFS asks: did someone sign this? IK + CSFS asks: did the owner sign this?",
+                "published_at": date(2026, 3, 21),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 4,
+            },
+            {
+                "title": "OP_CAT + OP_CHECKSIGFROMSTACK on Signet — Dynamic Message, Oracle Authorization",
+                "subtitle": "Combining concatenation and stack-signature verification for oracle-driven scripts.",
+                "published_at": date(2026, 3, 27),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 5,
+            },
+            {
+                "title": "SIGHASH_ANYPREVOUT on Signet: When Signatures Stop Binding to UTXOs",
+                "subtitle": "Standard CHECKSIG asks: did you sign for this UTXO? ANYPREVOUT relaxes that.",
+                "published_at": date(2026, 4, 11),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 6,
+            },
+        ],
+    },
+    {
+        "name": "Mastering Taproot",
+        "slug": "mastering-taproot",
+        "description": "Excerpts from the Mastering Taproot book project: deep chapters on P2SH foundations, Taproot internals, and the script-path stack.",
+        "articles": [
+            {
+                "title": "How Bitcoin P2SH Scripts Work: From 2-of-3 Multisig to Timelocked Inheritance",
+                "subtitle": "from Mastering Taproot — full chapter",
+                "published_at": date(2025, 7, 13),
+                "url": "https://medium.com/@aaron-recompile",
+                "position": 1,
+            },
+        ],
+    },
+]
+
+STANDALONES = [
+    {
+        "title": "Bitcoin Script Doesn't Execute What's on the Stack: A Developer's Journey From Misconception to Clarity",
+        "subtitle": "Not everything on the Bitcoin stack is meant to be executed — some things are meant to be verified, then forgotten.",
+        "published_at": date(2025, 7, 13),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "The Anatomy of Bitcoin Scripts: From P2PKH to Taproot",
+        "subtitle": "Understanding these primitives is the foundation for everything that follows — Lightning, covenant proposals, and beyond.",
+        "published_at": date(2025, 11, 23),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "Commit-Reveal vs Dual-Layer Scripts: The Real Architecture of Bitcoin Script",
+        "subtitle": "The universal truth: Commit → Reveal and Single-Layer vs Dual-Layer Scripts.",
+        "published_at": date(2025, 12, 2),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "Why Counterparty's Fake-Pubkey Grinding Reveals the Real Boundary Between Bitcoin Consensus and Policy",
+        "subtitle": "Consensus guarantees possibility. Policy guarantees sanity.",
+        "published_at": date(2025, 11, 22),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "Why V3 Matters: Bitcoin's Relay Layer Was Rewritten, and Most People Didn't Notice",
+        "subtitle": "V3, Package Relay, and Ephemeral Anchors quietly fixed a structural flaw in Bitcoin's fee and relay model.",
+        "published_at": date(2025, 11, 28),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "Bitcoin Doesn't Use Encryption — What Adam Back's Comment Really Means",
+        "subtitle": "Bitcoin has nothing encrypted. Its security is built on verification, not secrecy — and the real quantum risk is forgery, not decryption.",
+        "published_at": date(2025, 11, 16),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "RootScope: A Tool for Reconstructing Taproot Script Paths — Step by Step",
+        "subtitle": "When you spend from a Taproot script path, the hash chain is deterministic. Reconstructing it by hand is a trap.",
+        "published_at": date(2026, 3, 9),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+    {
+        "title": "The Missing Developer Stack of Taproot",
+        "subtitle": "Why Taproot still lacks the infrastructure developers need.",
+        "published_at": date(2026, 3, 11),
+        "url": "https://medium.com/@aaron-recompile",
+    },
+]
+
+
+def seed():
+    Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
+    try:
+        if db.query(Series).count() > 0:
+            print("Database already has series; skipping seed.")
+            return
+
+        for series_spec in SERIES:
+            articles = series_spec.pop("articles")
+            series = Series(**series_spec)
+            db.add(series)
+            db.flush()
+            for art in articles:
+                db.add(Article(series_id=series.id, **art))
+
+        for art in STANDALONES:
+            db.add(Article(**art))
+
+        db.commit()
+        n_series = db.query(Series).count()
+        n_articles = db.query(Article).count()
+        print(f"Seeded {n_series} series and {n_articles} articles.")
+    finally:
+        db.close()
+
+
+if __name__ == "__main__":
+    seed()
